@@ -18,11 +18,32 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      
+      // webpack plugin tht generates our html file and injects our bundles
+      new HtmlWebpackPlugin({
+        template: './index.html',
+      }),
+
+      // injects our custom service worker
+      // The InjectManifest plugin will generate a list of URLs to precache and add that precache 
+      // manifest to an existing service worker file. It will otherwise leave the file as-is
+      new InjectManifest({
+        // specify the path to the service worker file using the swSrc property
+        // this is where URLs will be injected
+        swSrc: './src-sw.js',
+        // control where the generated service worker file is saved, allowing you to customize the file name and location according to your project's needs.
+        swDest: 'src-sw.js',
+      }),
+
+
     ],
 
     module: {
       rules: [
+        // css loaders
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
         
       ],
     },
